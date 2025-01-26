@@ -1,0 +1,71 @@
+** cmd + $0d$0a
+
+* Open COM
+
+dg - Get device generation and type
+<- g0dg+084+07
+  : 0 = Device ID
+  : 084 = 0x54 = D-Series sensor
+  : 0 = Internal information
+  : 7 = Communication settings (see command sNbr)
+
+s0dac
+<- g0dac+00000006
+
+s0mc - Set/Get measuring characteristic (sNmc)
+<- g0mc+00000002
+
+s0mc+1
+<- s0mc?
+
+s0mc+2
+<- s0mc?
+
+s0sv - Get software version (sNsv)
+<- s0sv+00410121
+  : 0041 = Module software version
+  : 0121 = Interface software version
+s0sn - Get serial number (sNsn)
+<- s0sn+32450515
+  : 32450515 = Serial number of the device
+
+* 측정
+s0g - 1회 측정
+<- __1019.3 = Distance in 1/10 mm
+
+s0h+0 - 연속 측정(가장 빠르게 측정)
+<- __1019.3 = Distance in 1/10 mm
+
+s0h+500 - 연속 측정(500ms)
+<- __1019.3 = Distance in 1/10 mm
+
+s0f+0 - 트래킹 시작(가장 빠르게 측정)
+<- g0f?
+
+s0f+100 - 트래킹 시작(100ms)
+<- g0f?
+
+s0q
+<- 00010194+2
+  : 00010194 = Distance in 0.1 mm
+  : 2 = More than one measurement since last sNq command, overwritten
+    0 –› No new measurement since last sNq command
+    1 –› One new measurement since last sNq command, not overwritten
+
+s0c - 취소
+<- g0?
+
+s0o - Laser on (sNo)
+<- g0?
+
+s0t - Temperature measurement (sNt)
+<- g0t+00000234
+  : 00000234 = Temperature in 0.1°C
+
+s0re - Read/Clear error stack (sNre, sNce)
+<- g0re+200+234+200+211+200+234+200+211+255+200+234+255+211+255+211+234
+
+s0ce - Read/Clear error stack (sNre, sNce)
+<- q0ce?
+
+
